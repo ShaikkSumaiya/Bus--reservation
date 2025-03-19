@@ -1,0 +1,120 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>
+using namespace std;
+class Bus {
+public:
+ string busNumber;
+ string driverName;
+ string arrivalTime;
+ string departureTime;
+ string from;
+ string to;
+ string seats[32];
+ Bus(string busNumber, string driverName, string arrivalTime, 
+string departureTime, string from, string to) {
+ this->busNumber = busNumber;
+ this->driverName = driverName;
+ this->arrivalTime = arrivalTime;
+ this->departureTime = departureTime;
+ this->from = from;
+ this->to = to;
+ for (int i = 0; i < 32; i++) {
+ seats[i] = "Empty";
+ }
+ }
+ void displaySeats() {
+ cout << "Seat Number : Passenger Name" << endl;
+ for (int i = 0; i < 32; i++) {
+ cout << setw(2) << (i + 1) << " : " << seats[i] << endl;
+ }
+ }
+};
+class BusSystem {
+private:
+ vector<Bus> buses;
+public:
+ void addBus() {
+ string busNumber, driverName, arrivalTime, departureTime, 
+from, to;
+ cout << "Enter Bus Number: ";
+ cin >> busNumber;
+ cout << "Enter Driver Name: ";
+ cin >> driverName;
+ cout << "Enter Arrival Time: ";
+ cin >> arrivalTime;
+ cout << "Enter Departure Time: ";
+ cin >> departureTime;
+ cout << "Enter From: ";
+ cin >> from;
+ cout << "Enter To: ";
+ cin >> to;
+ Bus newBus(busNumber, driverName, arrivalTime, 
+departureTime, from, to);
+ buses.push_back(newBus);
+ cout << "Bus added successfully!" << endl;
+ }
+ void makeReservation() {
+ string busNumber, passengerName;
+ int seatNumber;
+ cout << "Enter Bus Number: ";
+ cin >> busNumber;
+ cout << "Enter Seat Number: ";
+ cin >> seatNumber;
+ cout << "Enter Passenger Name: ";
+ cin >> passengerName;
+ for (Bus &bus : buses) {
+ if (bus.busNumber == busNumber) {
+ if (seatNumber > 0 && seatNumber <= 32) {
+ if (bus.seats[seatNumber - 1] == "Empty") {
+ bus.seats[seatNumber - 1] = passengerName;
+ cout << "Reservation made successfully!" << endl;
+ } else {
+ cout << "Seat already reserved!" << endl;
+ }
+ } else {
+ cout << "Invalid seat number!" << endl;
+ }
+ return;
+ }
+ }
+ cout << "Bus not found!" << endl;
+ }
+ void showBusDetails() {
+ for (Bus &bus : buses) {
+ cout << "Bus Number: " << bus.busNumber << endl;
+ cout << "Driver Name: " << bus.driverName << endl;
+ cout << "Arrival Time: " << bus.arrivalTime << endl;
+ cout << "Departure Time: " << bus.departureTime << endl;
+ cout << "From: " << bus.from << endl;
+ cout << "To: " << bus.to << endl;
+ bus.displaySeats();
+ cout << "---------------------------------" << endl;
+ }
+ }
+};
+int main() {
+ BusSystem system;
+ int choice;
+ while (true) {
+ cout << "1. Add Bus\n2. Make Reservation\n3. Show Bus 
+Details\n4. Exit\nEnter your choice: ";
+ cin >> choice;
+ switch (choice) {
+ case 1:
+ system.addBus();
+ break;
+ case 2:
+ system.makeReservation();
+ break;
+ case 3:
+ system.showBusDetails();
+ break;
+ case 4:
+ return 0;
+ default:
+ cout << "Invalid choice! Please try again." << endl;
+ }
+ }
+ return 0
+}
